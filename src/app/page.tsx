@@ -422,7 +422,7 @@ export default function HomePage() {
           </div>
           <div className="text-center mt-12">
             <Link href="/about/cases">
-              <Button size="lg" className="px-10 py-4 bg-[#276084] !bg-[#276084] border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white active:bg-yellow-600 active:border-yellow-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <Button size="lg" className="px-10 py-4 !bg-[#276084] border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white active:bg-yellow-600 active:border-yellow-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Se alle vores referencer
               </Button>
             </Link>
