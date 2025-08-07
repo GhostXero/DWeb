@@ -139,8 +139,8 @@ const Footer = () => {
               Hurtige Links
             </h3>
             <ul className="space-y-2">
-              {footerLinks.HurtigeLinks.map((link) => (
-                <li key={link.href}>
+              {footerLinks.HurtigeLinks.map((link, index) => (
+                <li key={index}>
                   <Link 
                     href={link.href}
                     className="text-muted-foreground hover:text-foreground transition-colors"

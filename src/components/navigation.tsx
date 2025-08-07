@@ -123,17 +123,17 @@ const Navigation = () => {
     <nav className="bg-background border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+         {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Image 
-              src="https://cdn-main.ideal.shop/images/by_hash/a9aa5ed63f5bb87a600ab791b6dbcb0edfa54fa54a39af75bff68ceac44b1760/0-80/Deber_logo.png" 
-              alt="Deber Ventilation - Professionelle ventilationsløsninger siden 1976" 
-              width={120}
-              height={48}
-              className="w-auto h-12"
-              priority
-            />
-          </Link>
+           <Image 
+            src="/logo.png"  // Changed to local path
+            alt="Deber Ventilation - Professionelle ventilationsløsninger siden 1976" 
+            width={300}
+            height={100}
+           className="w-auto h-36"
+           priority
+          />
+         </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">

@@ -1,6 +1,5 @@
 'use client';
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // Added useRef import
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +25,6 @@ import {
   Star,
   ArrowRight
 } from "lucide-react";
-
 // Define form validation schema
 const contactSchema = z.object({
   name: z.string().min(2, 'Navn skal være mindst 2 tegn'),
@@ -36,10 +34,10 @@ const contactSchema = z.object({
   service: z.string().optional(),
   message: z.string().min(10, 'Besked skal være mindst 10 tegn'),
 });
-
 export default function ContactPage() {
   const searchParams = useSearchParams();
-
+  const hasInitialized = useRef(false); // Added ref to track initialization
+  
   // Initialize form with validation
   const {
     values,
@@ -72,13 +70,10 @@ export default function ContactPage() {
           },
           body: JSON.stringify(formData),
         });
-
         const data = await response.json();
-
         if (!response.ok) {
           throw new Error(data.message || 'Der opstod en fejl under afsendelse.');
         }
-
         console.log('Form submitted successfully:', data);
       } catch (error) {
         console.error('Form submission error:', error);
@@ -88,14 +83,17 @@ export default function ContactPage() {
     validateOnChange: false,
     validateOnBlur: false,
   });
-
+  
   // Initialize form data with URL parameters and handle scrolling
   useEffect(() => {
+    // Skip if we've already initialized
+    if (hasInitialized.current) return;
+    
     // Ensure we're on the client side before accessing window
     if (typeof window === 'undefined') {
       return;
     }
-
+    
     // Safely get service parameter
     let serviceParam = null;
     try {
@@ -150,8 +148,11 @@ export default function ContactPage() {
     if (hasContactHash) {
       scrollToForm();
     }
-  }, [searchParams, setFieldValue]);
-
+    
+    // Mark as initialized
+    hasInitialized.current = true;
+  }, [searchParams]); // Removed setFieldValue from dependencies
+  
   const services = [
     "Boligventilation",
     "Komfortventilation", 
@@ -163,7 +164,6 @@ export default function ContactPage() {
     "Service & Vedligehold",
     "Andet"
   ];
-
   const offices = [
     {
       name: "Hovedkontor - Fredericia",
@@ -182,7 +182,6 @@ export default function ContactPage() {
       map: "Aarhus"
     }
   ];
-
   const emergencyContacts = [
     {
       service: "Akut Service",
@@ -203,8 +202,6 @@ export default function ContactPage() {
       available: true
     }
   ];
-
-
 
   return (
     <div className="min-h-screen">
@@ -240,7 +237,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       {/* Contact Options */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -275,7 +271,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       {/* Contact Form and Offices */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -290,7 +285,6 @@ export default function ContactPage() {
                   Udfyld formularen, så kontakter vi dig hurtigst muligt.
                 </p>
               </div>
-
               {isSubmitted ? (
                 <Card className="border-[#3b5370]/20 bg-[#3b5370]/5">
                   <CardContent className="p-6">
@@ -345,7 +339,6 @@ export default function ContactPage() {
                           />
                         </div>
                       </div>
-
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -380,7 +373,6 @@ export default function ContactPage() {
                           )}
                         </div>
                       </div>
-
                       <div>
                         <label htmlFor="service" className="block text-sm font-medium text-gray-700 mb-1">
                           Service interesse
@@ -400,7 +392,6 @@ export default function ContactPage() {
                           ))}
                         </select>
                       </div>
-
                       <div>
                         <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                           Besked *
@@ -418,13 +409,11 @@ export default function ContactPage() {
                           <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                         )}
                       </div>
-
                       {errors.submit && (
                         <div className="bg-red-50 border border-red-200 rounded-md p-3">
                           <p className="text-red-700 text-sm">{errors.submit}</p>
                         </div>
                       )}
-
                       <Button
                         type="submit"
                         disabled={isSubmitting}
@@ -448,7 +437,6 @@ export default function ContactPage() {
                 </Card>
               )}
             </div>
-
             {/* Offices */}
             <div>
               <div className="text-center mb-8">
@@ -459,7 +447,6 @@ export default function ContactPage() {
                   Besøg os på en af vores lokationer eller kontakt os direkte.
                 </p>
               </div>
-
               <div className="space-y-6">
                 {offices.map((office, index) => (
                   <Card key={index} className="tech-card hover:shadow-xl transition-shadow">
@@ -496,7 +483,6 @@ export default function ContactPage() {
                   </Card>
                 ))}
               </div>
-
               {/* Quick Info */}
               <Card className="mt-8 bg-[#3b5370]/5 border-[#3b5370]/20">
                 <CardContent className="p-6">
@@ -540,7 +526,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       {/* Service Areas */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -552,7 +537,6 @@ export default function ContactPage() {
               Vi dækker hele Danmark med særligt fokus på disse områder.
             </p>
           </div>
-
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {[
               "Fredericia", "Kolding", "Vejle", "Horsens",
@@ -565,7 +549,6 @@ export default function ContactPage() {
               </div>
             ))}
           </div>
-
           <div className="text-center mt-8">
             <p className="tech-text text-gray-600 mb-4">
               Ser du ikke din by? Vi dækker hele Danmark - kontakt os for mere information.
@@ -577,7 +560,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       {/* FAQ Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -590,12 +572,11 @@ export default function ContactPage() {
                 Få svar på de mest almindelige spørgsmål om vores services og kontakt.
               </p>
             </div>
-
             <div className="space-y-6">
               {[
                 {
                   question: "Hvor hurtigt kan I komme ud til akut opgaver?",
-                  answer: "For eksisterende kunder med serviceaftaler tilbyder vi 24/7 akut service. For nye kunder stræber vi efter at være fremme inden for 24-48 timer afhængig af opgavens karakter og placering."
+                  answer: "For eksisterende kunder med serviceaftaler tilbyder vi 24/7 akut service. For nye kunder stræber vi efter at være fremme inden for 24-48 timer afhængigt af opgavens karakter og placering."
                 },
                 {
                   question: "Hvad koster et typisk ventilationsprojekt?",
@@ -624,7 +605,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-16 bg-[#3b5370] text-white">
         <div className="container mx-auto px-4">
